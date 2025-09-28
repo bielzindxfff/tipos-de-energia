@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aulas de Energia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Partículas animadas no fundo */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .header {
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.4rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            animation: slideUp 1s ease-out 0.3s both;
+        }
+        
+        .btn {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            border: none;
+            border-radius: 16px;
+            padding: 28px 35px;
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .btn-icon {
+            font-size: 2.5rem;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+        }
+        
+        .btn:hover .btn-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .btn-text {
+            text-align: left;
+            flex: 1;
+        }
+        
+        .btn-title {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .btn-description {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .btn-arrow {
+            font-size: 1.8rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover .btn-arrow {
+            transform: translateX(5px);
+            opacity: 1;
+        }
+        
+        .btn-1 .btn-icon {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+        
+        .btn-2 .btn-icon {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            color: white;
+        }
+        
+        .btn-3 .btn-icon {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+            color: white;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+        
+        /* Páginas das Aulas */
+        .lesson-page {
+            display: none;
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            z-index: 10;
+            position: relative;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .lesson-header {
+            color: white;
+            padding: 35px;
+            text-align: center;
+        }
+        
+        .lesson-1 .lesson-header {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+        
+        .lesson-2 .lesson-header {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+        }
+        
+        .lesson-3 .lesson-header {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+        }
+        
+        .lesson-header h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .lesson-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .lesson-content {
+            padding: 45px;
+            max-height: 75vh;
+            overflow-y: auto;
+            font-size: 1.2rem;
+        }
+        
+        .lesson-section {
+            margin-bottom: 45px;
+        }
+        
+        .lesson-section h2 {
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 2.2rem;
+        }
+        
+        .lesson-1 .lesson-section h2 {
+            color: #4CAF50;
+        }
+        
+        .lesson-2 .lesson-section h2 {
+            color: #2196F3;
+        }
+        
+        .lesson-3 .lesson-section h2 {
+            color: #FF9800;
+        }
+        
+        .lesson-section p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #444;
+            font-size: 1.25rem;
+        }
+        
+        .highlight-box {
+            background: #f9f9f9;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            font-size: 1.25rem;
+        }
+        
+        .lesson-1 .highlight-box {
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .lesson-2 .highlight-box {
+            border-left: 5px solid #2196F3;
+        }
+        
+        .lesson-3 .highlight-box {
+            border-left: 5px solid #FF9800;
+        }
+        
+        .activity-box {
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .lesson-1 .activity-box {
+            background: #e8f5e9;
+            border: 2px solid #c8e6c9;
+        }
+        
+        .lesson-2 .activity-box {
+            background: #e3f2fd;
+            border: 2px solid #bbdefb;
+        }
+        
+        .lesson-3 .activity-box {
+            background: #fff3e0;
+            border: 2px solid #ffe0b2;
+        }
+        
+        .activity-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .lesson-1 .activity-box h3 {
+            color: #2e7d32;
+        }
+        
+        .lesson-2 .activity-box h3 {
+            color: #1565c0;
+        }
+        
+        .lesson-3 .activity-box h3 {
+            color: #e65100;
+        }
+        
+        .activity-box h4 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .lesson-1 .activity-box h4 {
+            color: #1b5e20;
+        }
+        
+        .lesson-2 .activity-box h4 {
+            color: #0d47a1;
+        }
+        
+        .lesson-3 .activity-box h4 {
+            color: #bf360c;
+        }
+        
+        .question {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        
+        .question p {
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        
+        .answer {
+            margin-left: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #009688;
+            font-size: 1.2rem;
+        }
+        
+        .lesson-1 .answer {
+            background: #e0f2f1;
+        }
+        
+        .lesson-2 .answer {
+            background: #e0f7fa;
+        }
+        
+        .lesson-3 .answer {
+            background: #e0f2f1;
+        }
+        
+        .energy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .energy-category {
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .renewable {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 2px solid #4CAF50;
+        }
+        
+        .non-renewable {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border: 2px solid #f44336;
+        }
+        
+        .energy-category h3 {
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+        
+        .renewable h3 {
+            color: #2e7d32;
+        }
+        
+        .non-renewable h3 {
+            color: #c62828;
+        }
+        
+        .energy-list {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .energy-list li {
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .matrix-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .matrix {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .matrix h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        
+        .matrix-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .matrix-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transformation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1.2rem;
+        }
+        
+        .transformation-table th {
+            background: #FF9800;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .transformation-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .transformation-table tr:nth-child(even) {
+            background: #fff3e0;
+        }
+        
+        .transformation-table tr:hover {
+            background: #ffe0b2;
+        }
+        
+        .transformation-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .energy-step {
+            padding: 12px 20px;
+            background: #fff3e0;
+            border-radius: 8px;
+            border: 2px solid #FF9800;
+        }
+        
+        .energy-arrow {
+            color: #FF9800;
+            font-size: 1.5rem;
+        }
+        
+        .mind-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .energy-type {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+            font-size: 1.15rem;
+        }
+        
+        .energy-type:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .energy-type h4 {
+            color: #4CAF50;
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .back-btn {
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 25px auto;
+            transition: all 0.3s;
+        }
+        
+        .lesson-1 .back-btn {
+            background: #4CAF50;
+        }
+        
+        .lesson-2 .back-btn {
+            background: #2196F3;
+        }
+        
+        .lesson-3 .back-btn {
+            background: #FF9800;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .lesson-1 .back-btn:hover {
+            background: #388E3C;
+        }
+        
+        .lesson-2 .back-btn:hover {
+            background: #1976D2;
+        }
+        
+        .lesson-3 .back-btn:hover {
+            background: #F57C00;
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .btn {
+                padding: 25px 20px;
+                font-size: 1.5rem;
+            }
+            
+            .btn-icon {
+                font-size: 2rem;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .btn-title {
+                font-size: 1.5rem;
+            }
+            
+            .btn-description {
+                font-size: 1rem;
+            }
+            
+            .lesson-content {
+                padding: 30px;
+                font-size: 1.1rem;
+            }
+            
+            .lesson-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .lesson-section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .lesson-section p {
+                font-size: 1.15rem;
+            }
+            
+            .energy-grid, .matrix-container, .mind-map {
+                grid-template-columns: 1fr;
+            }
+            
+            .transformation-table {
+                font-size: 1rem;
+            }
+            
+            .transformation-table th, .transformation-table td {
+                padding: 8px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 20px 15px;
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                font-size: 1.3rem;
+            }
+            
+            .btn-text {
+                text-align: center;
+            }
+            
+            .btn-arrow {
+                display: none;
+            }
+            
+            .lesson-header h1 {
+                font-size: 2rem;
+            }
+            
+            .lesson-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .lesson-content {
+                padding: 20px;
+                font-size: 1rem;
+            }
+            
+            .lesson-section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .lesson-section p {
+                font-size: 1.1rem;
+            }
+            
+            .highlight-box, .activity-box, .question, .answer {
+                padding: 15px;
+            }
+            
+            .transformation-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas animadas no fundo -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Página Principal -->
+    <div class="container" id="main-page">
+        <div class="header">
+            <h1>Aulas de Energia</h1>
+            <p class="subtitle">Explore os conceitos fundamentais sobre energia em nosso cotidiano, suas fontes e transformações</p>
+        </div>
+        
+        <div class="buttons-container">
+            <button class="btn btn-1" id="lesson1-btn">
+                <div class="btn-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="btn-text">
+                    <div class="btn-title">Aula 1 - Energia Do Cotidiano</div>
+                    <div class="btn-description">Descubra como a energia está presente no nosso dia a dia</div>
+                </div>
+                <div class="btn-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </button>
+            
+            <button class="btn btn-2" id="lesson2-btn">
+                <div class="btn-icon">
+                    <i class="fas fa-solar-panel"></i>
+                </div>
+                <div class="btn-text">
+                    <div class="btn-title">Aula 2 - Fontes de Energia</div>
+                    <div class="btn-description">Conheça as diferentes fontes de energia disponíveis</div>
+                </div>
+                <div class="btn-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </button>
+            
+            <button class="btn btn-3" id="lesson3-btn">
+                <div class="btn-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="btn-text">
+                    <div class="btn-title">Aula 3 - Transformação De Energia</div>
+                    <div class="btn-description">Entenda como a energia se transforma de uma forma para outra</div>
+                </div>
+                <div class="btn-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>Clique em uma aula para começar sua jornada de aprendizado</p>
+        </div>
+    </div>
+    
+    <!-- Página da Aula 1 -->
+    <div class="lesson-page lesson-1" id="lesson1-page">
+        <div class="lesson-header">
+            <h1>Aula 1 - Energia no Cotidiano</h1>
+            <p class="lesson-subtitle">Como a energia está presente em nosso dia a dia</p>
+        </div>
+        
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>Introdução</h2>
+                <p>A energia está presente em situações simples e complexas do nosso cotidiano. Por exemplo, a televisão usa energia elétrica para produzir imagem e som, o chuveiro elétrico, para aquecer a água, e o liquidificador, para produzir movimento e triturar alimentos.</p>
+                
+                <div class="highlight-box">
+                    <p>A energia é essencial para nossa sobrevivência e, ao longo da história, a humanidade aprimorou seu uso, no entanto algumas fontes de energia, como os combustíveis fósseis, causam impactos ambientais, como poluição e aquecimento global. É importante, por isso, usar a energia de forma responsável, evitando desperdícios e adotando fontes renováveis, que são sustentáveis e têm baixo impacto no meio ambiente.</p>
+                </div>
+            </div>
+            
+            <div class="lesson-section">
+                <h2>Na Prática</h2>
+                <div class="activity-box">
+                    <h3>Atividade 1</h3>
+                    <p>Para conhecer mais sobre como a energia está presente em nosso cotidiano e na história da humanidade, você deverá ler alguns trechos do texto "O que é energia?" publicado no site da Empresa de Pesquisa Energética (EPE). E com base no texto, responda às questões.</p>
+                    
+                    <div class="highlight-box">
+                        <h4>Como o ser humano utiliza energia?</h4>
+                        <p>O fogo foi a primeira forma de energia dominada pela humanidade. Com o fogo, o ser humano aprendeu a espantar animais selvagens, cozinhar alimentos e fazer ferramentas e utensílios para o uso em sua jornada pela terra. Os primeiros utensílios feitos com o uso do fogo foram panelas e jarros de barro cozido, que facilitaram a vida do ser humano. Posteriormente, começou a utilizar o fogo para fundir metais e fazer lanças, flechas, espadas e outros instrumentos mais elaborados.</p>
+                        <p>[...] Hoje convivemos com várias formas de energia, que utilizamos na nossa vida diária. Na sua casa tem a geladeira, a televisão, as lâmpadas, o seu brinquedo e a pilha – todos precisam de energia para funcionar. Uma pipa no ar está utilizando a energia do vento, uma panela no fogão cozinhando alimentos está utilizando a energia do fogo, uma criança correndo está usando a energia dos alimentos que ela ingeriu e a televisão usa energia elétrica para que possamos assistir a nossos filmes e desenhos favoritos. Portanto, atenção ao seu dia a dia: você mesmo poderá descobrir outras formas de utilização da energia. Quando tomamos banho quente, também usamos energia para aquecer a água, seja a eletricidade para o chuveiro elétrico, o gás natural do aquecedor ou a energia do sol captada por painéis no telhado.</p>
+                        <p><em>EMPRESA DE PESQUISA ENERGÉTICA (EPE), O que é energia? [s.d.] Disponível em https://www.epe.gov.br/pt/daccienergia/o-que-e-energia. Acesso em: 27 mar. 2026.</em></p>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>Como o domínio de uma fonte de energia como o fogo ajudou os primeiros seres humanos em sua jornada pela Terra?</strong></p>
+                        <div class="answer">
+                            <p>O domínio do fogo foi fundamental para os primeiros seres humanos, pois possibilitou ações essenciais como espantar animais selvagens, cozinhar alimentos e criar ferramentas e utensílios. O uso do fogo permitiu o desenvolvimento de objetos mais elaborados, como panelas e jarros de barro, que facilitaram a vida cotidiana e ajudaram na evolução das atividades humanas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>1. De acordo com o texto, de que forma os diferentes tipos de energia estão presentes em nosso cotidiano, mesmo nas atividades mais simples?</strong></p>
+                        <div class="answer">
+                            <p>O cotidiano moderno está repleto de exemplos de como utilizamos diferentes formas de energia. Por exemplo, a geladeira, a televisão e as lâmpadas em casa usam energia elétrica, a pipa no ar aproveita a energia do vento, e uma criança correndo usa a energia dos alimentos que ingere. Até mesmo atividades simples, como cozinhar, envolvem o uso de energia, como o fogo no fogão.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>2. Ao refletir sobre suas atividades hoje, quais tipos de energia estiveram presentes nas situações que você viveu?</strong></p>
+                        <div class="answer">
+                            <p>Resposta pessoal. Mas os estudantes podem elencar algumas situações como as descritas a seguir. No cotidiano, estão presentes diversos tipos de energia, como a elétrica e luminosa, usadas em aparelhos e iluminação; a térmica, no calor do sol ou aquecedores; a mecânica, em atividades físicas e máquinas; a química, em combustíveis e alimentos; e a sonora, produzida por sons e música.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-section">
+                <h2>Aprofundando</h2>
+                <div class="question">
+                    <p><strong>1. A energia química presente nos combustíveis fósseis, como o petróleo, carvão e gás natural, é amplamente utilizada para produzir eletricidade, aquecer ambientes e impulsionar veículos. No entanto o uso desses combustíveis tem causado preocupações ambientais devido à emissão de gases poluentes e ao esgotamento dos recursos naturais. Com base nessa afirmativa, assinale a alternativa que expressa corretamente a utilização desse tipo de energia e seus possíveis impactos ambientais:</strong></p>
+                    <p>a) a energia química dos combustíveis fósseis é convertida em energia mecânica para veículos e em eletricidade para residências, mas seu uso não tem impactos ambientais significativos.</p>
+                    <p>b) a energia química dos combustíveis fósseis, como o petróleo e o gás natural, ao ser liberada na queima, provoca poluição do ar e contribui para o aquecimento global.</p>
+                    <p>c) combustíveis fósseis, como carvão e petróleo, produzem energia química que é utilizada para a produção de alimentos e produtos químicos, sem causar impactos negativos.</p>
+                    <p>d) a energia química dos combustíveis fósseis, como gás natural e carvão, é transformada em energia térmica para aquecer ambientes sem impactos negativos à natureza.</p>
+                    
+                    <div class="answer">
+                        <p><strong>Resposta correta: B</strong></p>
+                        <p>Processos nos quais ocorre a queima de combustíveis fósseis liberam gases poluentes, que contribuem com o aquecimento global.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-section">
+                <h2>Resumo - Tipos de Energia</h2>
+                <p>Energia é a capacidade de realizar trabalho, ou seja, é o que possibilita que alguns processos aconteçam, como aquecer ambientes, fazer aparelhos funcionarem ou movimentar objetos. Existem diversas formas de energia, conforme ilustrado no mapa mental a seguir.</p>
+                
+                <div class="mind-map">
+                    <div class="energy-type">
+                        <h4>ENERGIA ELÉTRICA</h4>
+                        <p>Energia resultante do movimento de partículas carregadas, como elétrons.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA SONORA</h4>
+                        <p>Energia propagada por ondas sonoras.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA POTENCIAL</h4>
+                        <p>Energia armazenada devido à posição ou configuração de um objeto.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA CINÉTICA</h4>
+                        <p>Energia do movimento de um objeto.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA TÉRMICA</h4>
+                        <p>Energia associada ao movimento de partículas em um material, e percebida como calor.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA LUMINOSA</h4>
+                        <p>Energia transportada pela luz.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA QUÍMICA</h4>
+                        <p>Energia armazenada em substâncias e liberada em reações químicas.</p>
+                    </div>
+                    <div class="energy-type">
+                        <h4>ENERGIA NUCLEAR</h4>
+                        <p>Energia liberada a partir do núcleo dos átomos, em fissão ou fusão nuclear.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="back-btn" id="back-btn-1">
+                <i class="fas fa-arrow-left"></i>
+                Voltar para o Menu Principal
+            </button>
+        </div>
+    </div>
+    
+    <!-- Página da Aula 2 -->
+    <div class="lesson-page lesson-2" id="lesson2-page">
+        <div class="lesson-header">
+            <h1>Aula 2 - Fontes de Energia</h1>
+            <p class="lesson-subtitle">Conheça as diferentes fontes de energia renováveis e não renováveis</p>
+        </div>
+        
+        <div class="lesson-content">
+            <!-- NA PRÁTICA - PRIMEIRO -->
+            <div class="lesson-section">
+                <h2>Na Prática</h2>
+                <div class="activity-box">
+                    <h3>Atividade 1</h3>
+                    <p>Faça a leitura do texto Série Energia: "Fenômenos climáticos podem ser minimizados pela transição energética", retirado do Jornal USP, publicado no dia 07/02/2025.</p>
+                    
+                    <div class="highlight-box">
+                        <p>A relação entre a transição energética e os eventos climáticos extremos é um dos principais focos do Global Risks Report 2025, relatório do Fórum Econômico Mundial que alerta sobre a intensificação de fenômenos climáticos como enchentes, furacões e ondas de calor. Esses eventos, cada vez mais frequentes e severos, são amplificados pela continua dependência de combustíveis fósseis, como carvão, petróleo e gás natural, cujas emissões de gases de efeito estufa contribuem diretamente para as mudanças climáticas. Em resposta a esses desafios, a transição para energias renováveis é apresentada como uma solução essencial para reduzir os impactos climáticos e promover a sustentabilidade global.</p>
+                        <p>A transição energética é destacada como uma oportunidade crucial para limitar os efeitos das mudanças climáticas. Fontes de energia renovável, como solar, eólica e hidrogênio verde, têm o potencial de reduzir drasticamente as emissões de carbono, fortalecer a resiliência energética e criar oportunidades econômicas significativas, como a geração de empregos. Contudo, o relatório ressalta os desafios associados a esse processo, incluindo a necessidade de grandes investimentos em infraestrutura, a integração de fontes renováveis intermitentes e a crescente demanda por materiais críticos para tecnologias de armazenamento de energia.</p>
+                    </div>
+                    
+                    <h4>Em grupo, leia o texto e responda às questões a seguir:</h4>
+                    
+                    <div class="question">
+                        <p><strong>Quais são os impactos negativos da dependência de combustíveis fósseis?</strong></p>
+                        <div class="answer">
+                            <p>Os impactos negativos da dependência de combustíveis fósseis incluem a intensificação de fenômenos climáticos extremos, como enchentes, furacões e ondas de calor, em virtude das emissões de gases poluentes que intensificam o efeito estufa e ocasionam as mudanças climáticas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>Pensando no futuro, como vocês imaginam o mundo daqui a 20 anos se continuarmos dependentes de combustíveis fósseis? E como seria se a transição energética fosse bem-sucedida?</strong></p>
+                        <div class="answer">
+                            <p>Se continuarmos dependentes de combustíveis fósseis nos próximos 20 anos, as mudanças climáticas provavelmente se intensificarão, com fenômenos climáticos mais extremos, como altas temperaturas, secas e tempestades.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <p><strong>Quais são os desafios para a implementação da transição energética e como podemos superá-los?</strong></p>
+                        <div class="answer">
+                            <p>A transição energética enfrenta muitos desafios, como altos investimentos, adaptação das fontes renováveis, maior demanda por materiais para armazenar energia e desigualdades financeira e de recursos naturais entre os países.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MATRIZES ENERGÉTICAS - SEGUNDO -->
+            <div class="lesson-section">
+                <h2>Matrizes Energéticas</h2>
+                
+                <div class="matrix-container">
+                    <div class="matrix">
+                        <h3>Matriz Energética Mundial 2022</h3>
+                        <div class="matrix-item"><span>Carvão mineral</span><span>27,6%</span></div>
+                        <div class="matrix-item"><span>Outras</span><span>3,1%</span></div>
+                        <div class="matrix-item"><span>Biomassa</span><span>8,8%</span></div>
+                        <div class="matrix-item"><span>Hidráulica</span><span>2,5%</span></div>
+                        <div class="matrix-item"><span>Nuclear</span><span>4,7%</span></div>
+                        <div class="matrix-item"><span>Petróleo e derivados</span><span>30,2%</span></div>
+                        <div class="matrix-item"><span>Gás natural</span><span>23,1%</span></div>
+                    </div>
+                    
+                    <div class="matrix">
+                        <h3>Matriz Energética Brasileira 2023</h3>
+                        <div class="matrix-item"><span>Outras não renováveis</span><span>0,6%</span></div>
+                        <div class="matrix-item"><span>Petróleo e derivados</span><span>35,1%</span></div>
+                        <div class="matrix-item"><span>Derivados da cana-de-açúcar</span><span>16,8%</span></div>
+                        <div class="matrix-item"><span>Carvão mineral</span><span>4,4%</span></div>
+                        <div class="matrix-item"><span>Eólica e solar</span><span>4,4%</span></div>
+                        <div class="matrix-item"><span>Outras renováveis</span><span>7,2%</span></div>
+                        <div class="matrix-item"><span>Lenha e carvão vegetal</span><span>8,6%</span></div>
+                        <div class="matrix-item"><span>Gás natural</span><span>9,6%</span></div>
+                        <div class="matrix-item"><span>Hidráulica</span><span>12,1%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APROFUNDANDO - TERCEIRO -->
+            <div class="lesson-section">
+                <h2>Aprofundando</h2>
+                <div class="question">
+                    <p><strong>1. O que pode ocorrer com a escassez de fontes de energia não renováveis, como petróleo e carvão, nos próximos anos?</strong></p>
+                    <p>a) O preço das fontes de energia renováveis cairá drasticamente.</p>
+                    <p>b) O uso de fontes não renováveis continuará em crescimento, sem impactos significativos.</p>
+                    <p>c) O mundo poderá usar mais fontes de energia renováveis para suprir a demanda crescente.</p>
+                    <p>d) Não haverá mudanças, pois acredita-se que as fontes não renováveis são inesgotáveis.</p>
+                    
+                    <div class="answer">
+                        <p><strong>Resposta correta: C</strong></p>
+                        <p>Perante a escassez de recursos naturais finitos, os países precisarão desenvolver tecnologias para utilizar cada vez mais energias renováveis.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESUMO - AGORA NO FINAL -->
+            <div class="lesson-section">
+                <h2>Resumo</h2>
+                <p>Uma fonte de energia é um recurso capaz de fornecer energia para realizar atividades, como acender uma lâmpada, movimentar um carro ou fazer funcionar uma máquina. Essas fontes podem ser classificadas em <strong>renováveis e não renováveis</strong>.</p>
+                
+                <div class="energy-grid">
+                    <div class="energy-category renewable">
+                        <h3>Fontes de Energias Renováveis</h3>
+                        <ul class="energy-list">
+                            <li>Solar</li>
+                            <li>Geotérmica</li>
+                            <li>Onda (ondomotriz ou oceânica)</li>
+                            <li>Bio-massa</li>
+                            <li>Hidráulica</li>
+                            <li>Maré (maremotriz)</li>
+                            <li>Vento (eólica)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="energy-category non-renewable">
+                        <h3>Fontes de Energias Não Renováveis</h3>
+                        <ul class="energy-list">
+                            <li>Petróleo</li>
+                            <li>Nuclear</li>
+                            <li>Carvão</li>
+                            <li>Gás natural</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <p>As fontes não renováveis, como os combustíveis fósseis (petróleo, carvão e gás natural), causam diversos impactos ambientais, como emissão de gases poluentes, alterações climáticas, poluição da água e do solo, destruição de ecossistemas e exaustão de recursos naturais.</p>
+                    <p>A matriz energética de um país é a combinação das fontes de energia que ele usa. Ela muda conforme os recursos naturais, decisões políticas, questões ambientais e tecnologia. No Brasil, a energia vem principalmente de fontes renováveis, como hidrelétricas, mas o país ainda depende de petróleo e gás natural – especialmente em época de seca, quando a geração de energia elétrica pelas hidrelétricas é insuficiente.</p>
+                </div>
+            </div>
+            
+            <button class="back-btn" id="back-btn-2">
+                <i class="fas fa-arrow-left"></i>
+                Voltar para o Menu Principal
+            </button>
+        </div>
+    </div>
+    
+    <!-- Página da Aula 3 -->
+    <div class="lesson-page lesson-3" id="lesson3-page">
+        <div class="lesson-header">
+            <h1>Aula 3 - Transformação de Energia</h1>
+            <p class="lesson-subtitle">Entenda como a energia se transforma de uma forma para outra</p>
+        </div>
+        
+        <div class="lesson-content">
+            <!-- NA PRÁTICA - PRIMEIRO -->
+            <div class="lesson-section">
+                <h2>Na Prática</h2>
+                <div class="activity-box">
+                    <h3>Atividade 1</h3>
+                    <p>Para aprofundar seus conhecimentos sobre energia e suas transformações, acesse o simulador mencionado na aula (Phet Colorado) e analise as situações apresentadas na tabela. Em seguida, preencha as colunas com as energias presentes no sistema e suas respectivas transformações.</p>
+                    
+                    <table class="transformation-table">
+                        <thead>
+                            <tr>
+                                <th>Processos analisados</th>
+                                <th>Energias presentes</th>
+                                <th>Transformação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Garota pedalando uma bicicleta.</td>
+                                <td>Energia química. Energia mecânica.</td>
+                                <td>A energia química presente no alimento é transformada em energia mecânica que move os pedais e pneus da bicicleta.</td>
+                            </tr>
+                            <tr>
+                                <td>Água caindo da torneira e acionando o gerador.</td>
+                                <td>Energia potencial gravitacional. Energia cinética.</td>
+                                <td>A energia potencial presente na água que está à torneira, se transforma em energia cinética fazendo o gerador se mover.</td>
+                            </tr>
+                            <tr>
+                                <td>Sol iluminando o painel solar.</td>
+                                <td>Energia luminosa. Energia elétrica.</td>
+                                <td>A energia luminosa proveniente do Sol é transformada em energia elétrica pelos painéis solares.</td>
+                            </tr>
+                            <tr>
+                                <td>Bule aquecido pelo fogo.</td>
+                                <td>Energia térmica. Energia cinética.</td>
+                                <td>A energia térmica do fogo é transformada em energia cinética, fazendo o vapor d'água mover o gerador.</td>
+                            </tr>
+                            <tr>
+                                <td>Gerador ligado a uma lâmpada.</td>
+                                <td>Energia cinética. Energia elétrica. Energia luminosa.</td>
+                                <td>A energia cinética que chega ao gerador é transformada em energia elétrica, que é transformada em energia luminosa pela lâmpada.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- APROFUNDANDO - SEGUNDO -->
+            <div class="lesson-section">
+                <h2>Aprofundando</h2>
+                <div class="question">
+                    <p><strong>1. Em um país que depende principalmente de usinas termelétricas para produzir energia, qual seria uma vantagem significativa ao investir mais em fontes renováveis como a energia solar e eólica?</strong></p>
+                    <p>a) Redução da dependência de fontes que causam poluição e emissões de gases de efeito estufa.</p>
+                    <p>b) Aumento da produção de energia em grande escala.</p>
+                    <p>c) Baixo custo de instalação das usinas de carvão.</p>
+                    <p>d) Aumento da quantidade de empregos no setor de petróleo.</p>
+                    
+                    <div class="answer">
+                        <p><strong>Resposta correta: A</strong></p>
+                        <p>Investir em fontes renováveis como a energia solar e eólica reduz a dependência de usinas termelétricas que causam poluição e emissões de gases de efeito estufa, contribuindo para um ambiente mais limpo e sustentável.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESUMO - TERCEIRO -->
+            <div class="lesson-section">
+                <h2>Resumo</h2>
+                <p>O princípio da conservação da energia afirma que a energia não se perde nem se cria, ela apenas se transforma. Ou seja, a quantidade total de energia permanece a mesma, apenas mudando de forma.</p>
+                
+                <p>A transformação de energia acontece quando uma energia se converte de um tipo para outro. Por exemplo, ao ligar uma lâmpada, a energia elétrica se transforma em energia luminosa e um pouco de calor. Na ilustração a seguir, podemos notar diferentes transformações de energia em situações cotidianas.</p>
+                
+                <div class="transformation-flow">
+                    <div class="energy-step">Energia química</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia luminosa</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia química</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia mecânica</div>
+                </div>
+                
+                <div class="transformation-flow">
+                    <div class="energy-step">Energia química</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia mecânica</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia elétrica</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia luminosa</div>
+                </div>
+                
+                <div class="transformation-flow">
+                    <div class="energy-step">Energia elétrica</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia luminosa</div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-step">Energia química</div>
+                </div>
+                
+                <div class="highlight-box">
+                    <p>É importante lembrar que nem toda energia é aproveitada nas transformações, pois parte dela pode se perder na forma de calor ou em formas difíceis de usar. Por exemplo, em uma moto, a energia química é convertida em movimento, mas o calor produzido não pode ser aproveitado e se dispersa no ambiente.</p>
+                </div>
+            </div>
+            
+            <button class="back-btn" id="back-btn-3">
+                <i class="fas fa-arrow-left"></i>
+                Voltar para o Menu Principal
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Criar partículas animadas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posição aleatória
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Atraso de animação aleatório
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Navegação entre páginas
+        const mainPage = document.getElementById('main-page');
+        const lesson1Page = document.getElementById('lesson1-page');
+        const lesson2Page = document.getElementById('lesson2-page');
+        const lesson3Page = document.getElementById('lesson3-page');
+        const lesson1Btn = document.getElementById('lesson1-btn');
+        const lesson2Btn = document.getElementById('lesson2-btn');
+        const lesson3Btn = document.getElementById('lesson3-btn');
+        const backBtn1 = document.getElementById('back-btn-1');
+        const backBtn2 = document.getElementById('back-btn-2');
+        const backBtn3 = document.getElementById('back-btn-3');
+        
+        lesson1Btn.addEventListener('click', function() {
+            mainPage.style.display = 'none';
+            lesson1Page.style.display = 'block';
+        });
+        
+        lesson2Btn.addEventListener('click', function() {
+            mainPage.style.display = 'none';
+            lesson2Page.style.display = 'block';
+        });
+        
+        lesson3Btn.addEventListener('click', function() {
+            mainPage.style.display = 'none';
+            lesson3Page.style.display = 'block';
+        });
+        
+        backBtn1.addEventListener('click', function() {
+            lesson1Page.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+        
+        backBtn2.addEventListener('click', function() {
+            lesson2Page.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+        
+        backBtn3.addEventListener('click', function() {
+            lesson3Page.style.display = 'none';
+            mainPage.style.display = 'block';
+        });
+        
+        // Inicializar partículas quando a página carregar
+        window.addEventListener('load', createParticles);
+    </script>
+</body>
+</html>
